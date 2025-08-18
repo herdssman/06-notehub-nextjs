@@ -19,7 +19,6 @@ export interface NotesClientProps {
 }
 
 
-
 export default function NotesClient({notes, totalPages: serverTotalPages}: NotesClientProps) {
 
   const [openModal, setOpenModal] = useState(false);
