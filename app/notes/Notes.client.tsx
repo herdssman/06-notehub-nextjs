@@ -9,10 +9,18 @@ import SearchBox from '../../components/SearchBox/SearchBox'
 import Modal from '../../components/Modal/Modal';
 import Pagination from '../../components/Pagination/Pagination';
 import NoteForm from '../../components/NoteForm/NoteForm';
+import { Note } from '@/types/note';
 
 
 
-export default function NotesClient() {
+export interface NotesClientProps {
+    notes: Note[];
+    totalPages: number;
+}
+
+
+
+export default function NotesClient({notes, totalPages: serverTotalPages}: NotesClientProps) {
 
   const [openModal, setOpenModal] = useState(false);
   const [search, setSearch] = useState('');
@@ -32,12 +40,16 @@ export default function NotesClient() {
       perPage,
       sortBy,
     }),
-    placeholderData: keepPreviousData,
+      placeholderData: keepPreviousData,
+      initialData: {
+          notes,
+          totalPages: serverTotalPages,
+    }
     
   })
 
 
-  const totalPages = data?.totalPages ?? 0;
+  const total = data?.totalPages ?? 0;
 
 
   useEffect(() => {
@@ -51,8 +63,8 @@ export default function NotesClient() {
 
         <SearchBox value={search} onChange={setSearch} />
 
-        {isSuccess && totalPages > 1 && (
-          <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />)}
+        {isSuccess && total > 1 && (
+          <Pagination currentPage={page} totalPages={total} onPageChange={setPage} />)}
       
       <button className={css.button} onClick={()=>setOpenModal(true)}>Create note +</button>
 
